@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 빌드 때 content/lessons/*/images 에서 복사되는 파일
+/public/lesson-assets/

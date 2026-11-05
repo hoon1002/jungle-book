@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t">
+  <title id="t">예시 도식 자리</title>
+  <rect x="1" y="1" width="638" height="358" rx="16" fill="#0f1a14" stroke="#3a5a48" stroke-width="2" stroke-dasharray="10 8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8fd6a8"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="#8fd6a8" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M150 250 Q 220 170 300 170"/>
+    <path d="M350 160 Q 430 120 490 150"/>
+  </g>
+  <g font-family="system-ui, sans-serif" font-size="20" text-anchor="middle" fill="#e8f3ec">
+    <circle cx="120" cy="270" r="30" fill="#1d3a2a" stroke="#8fd6a8" stroke-width="3"/>
+    <text x="120" y="277">1</text>
+    <circle cx="325" cy="165" r="30" fill="#1d3a2a" stroke="#8fd6a8" stroke-width="3"/>
+    <text x="325" y="172">2</text>
+    <circle cx="520" cy="165" r="30" fill="#1d3a2a" stroke="#8fd6a8" stroke-width="3"/>
+    <text x="520" y="172">3</text>
+  </g>
+  <text x="320" y="60" font-family="system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#e8f3ec">예시 도식 자리</text>
+  <text x="320" y="330" font-family="system-ui, sans-serif" font-size="16" text-anchor="middle" fill="#8aa596">실제 레슨에서는 직접 그린 도식이나 이미지로 바꿉니다</text>
+</svg>

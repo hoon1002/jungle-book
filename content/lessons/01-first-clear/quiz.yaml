@@ -1,0 +1,76 @@
+# 화면 개발용 예시(더미) 퀴즈입니다. 문제 모양(정답 하나 / 선택지 4개 / 조건부 정답 / 목록형 정보)을 골고루 넣었습니다.
+
+- id: q1
+  time: "1:25"
+  known: 예시로 적은 아는 정보입니다
+  unknown: 예시로 적은 모르는 정보입니다
+  question: 예시 질문입니다. 이 상황에서 무엇을 할까?
+  choices:
+    - text: 예시 선택지 A (정답)
+      correct: true
+      why: 예시 해설입니다. 실제 레슨에서는 이 선택이 맞는 이유를 씁니다.
+    - text: 예시 선택지 B
+      correct: false
+      why: 예시 해설입니다. 실제 레슨에서는 이 선택이 아닌 이유를 씁니다.
+    - text: 예시 선택지 C
+      correct: false
+      why: 예시 해설입니다. 오답에도 이유를 꼭 적습니다.
+
+- id: q2
+  time: "3:10"
+  known:
+    - 예시 정보 1
+    - 예시 정보 2
+  unknown: 예시 모르는 정보
+  question: 선택지가 4개인 예시 질문입니다. 휴대폰에서 버튼이 어떻게 쌓이는지 확인합니다.
+  choices:
+    - text: 예시 선택지 A
+      correct: false
+      why: 예시 해설 A
+    - text: 조금 긴 예시 선택지 B입니다. 선택지 문장이 두 줄로 넘어갈 때의 모양을 확인합니다
+      correct: true
+      why: 예시 해설 B입니다. 해설도 길어질 수 있으니 두세 문장 정도로 적어 봅니다. 화면에서 해설이 펼쳐질 때 자연스러운지 확인합니다.
+    - text: 예시 선택지 C
+      correct: false
+      why: 예시 해설 C
+    - text: 예시 선택지 D
+      correct: false
+      why: 예시 해설 D
+
+- id: q3
+  time: "4:30"
+  known: 예시 아는 정보
+  unknown:
+    - 예시 모르는 정보 1
+    - 예시 모르는 정보 2
+  question: 정답이 조건에 따라 달라지는 예시 질문입니다.
+  choices:
+    - text: 예시 선택지 A
+      correct: true
+      why: 예시 해설입니다. 조건 1일 때 맞는 선택입니다.
+    - text: 예시 선택지 B
+      correct: true
+      why: 예시 해설입니다. 조건 2일 때 맞는 선택입니다.
+    - text: 예시 선택지 C
+      correct: false
+      why: 예시 해설입니다. 어느 조건에서도 맞지 않는 선택입니다.
+  condition: 예시 조건입니다. 조건 1이면 A, 조건 2이면 B가 대체로 맞습니다.
+
+- id: q4
+  time: "6:00"
+  known:
+    - 예시 정보 1
+    - 예시 정보 2
+    - 예시 정보 3
+  unknown: 예시 모르는 정보
+  question: 마지막 예시 질문입니다. 다 풀면 요약 화면으로 넘어갑니다.
+  choices:
+    - text: 예시 선택지 A
+      correct: false
+      why: 예시 해설 A
+    - text: 예시 선택지 B
+      correct: false
+      why: 예시 해설 B
+    - text: 예시 선택지 C (정답)
+      correct: true
+      why: 예시 해설 C

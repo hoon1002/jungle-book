@@ -11,7 +11,10 @@
 ## 구조 규칙
 - 레슨 내용은 `content/lessons/<번호-영어이름>/`에만 둔다 (`lesson.md`, `quiz.yaml`, `images/`). 코드에 레슨 내용을 넣지 않는다.
 - 레슨 폴더 이름은 주소(URL)가 되므로 영어 소문자·숫자·하이픈만 쓴다. 화면 제목은 한글.
-- 레슨 양식(필수 칸)의 정의는 `src/lib/content/schema.ts` 한 곳뿐이다. 양식을 바꾸면 `content/_template/`과 점검 스크립트도 함께 고친다.
+- 레슨 양식(필수 칸)의 정의는 `src/lib/content/schema.ts` 한 곳뿐이다. 양식을 바꾸면 `content/_template/`과 점검(`src/lib/content/load.ts`)도 함께 고친다. 템플릿이 양식과 어긋나면 `load.test.ts`가 실패한다.
+- 점검 메시지는 작성자가 읽는다: 한국어로, 파일 경로·칸 이름·고치는 방법까지. 오류는 한 번에 전부 알려 준다.
+- 레슨 이미지는 레슨 폴더의 `images/`에만 둔다. `public/lesson-assets/`는 빌드 때 자동 복사되는 곳이라 직접 고치지 않는다 (git에도 안 올라감).
+- 레슨 데이터는 서버(빌드) 쪽 `getLessons()`로만 읽는다. 브라우저 코드에서 `load.ts`를 import 하지 않는다.
 - localStorage(진행도 저장)는 `src/lib/progress/`에서만 다룬다. 나중에 계정 연동으로 바꿀 수 있게 함수로만 접근한다.
 - 색·글꼴·간격은 `src/app/globals.css`의 디자인 토큰만 쓴다. 화면마다 임의 값을 넣지 않는다.
 - 모바일 우선: 375px 폭에서 깨지지 않게, 터치 영역은 44px 이상. 애니메이션은 `prefers-reduced-motion`을 존중한다.
@@ -28,6 +31,7 @@
 - 패치 의존 정보는 `:::patch` 블록에 두고 검증 패치(`verifiedPatch`)를 표시한다.
 
 ## 명령어
-- `npm run dev` — 개발 서버 (http://localhost:3000)
-- `npm run check` — 린트 + 타입 검사 + 테스트 (1단계부터 레슨 점검 포함)
-- `npm run build` — `out/` 폴더에 정적 사이트 만들기
+- `npm run dev` — 개발 서버 (http://localhost:3000). 시작할 때 레슨 이미지를 복사한다
+- `npm run check:lessons` — 레슨 양식 점검 (오류면 실패, 경고는 알림만)
+- `npm run check` — 린트 + 타입 검사 + 레슨 점검 + 테스트
+- `npm run build` — 레슨 점검 → 이미지 복사 → `out/` 폴더에 정적 사이트 만들기. 레슨 오류가 있으면 멈춘다
