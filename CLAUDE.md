@@ -16,6 +16,11 @@
 - 레슨 이미지는 레슨 폴더의 `images/`에만 둔다. `public/lesson-assets/`는 빌드 때 자동 복사되는 곳이라 직접 고치지 않는다 (git에도 안 올라감).
 - 레슨 데이터는 서버(빌드) 쪽 `getLessons()`로만 읽는다. 브라우저 코드에서 `load.ts`를 import 하지 않는다.
 - localStorage(진행도 저장)는 `src/lib/progress/`에서만 다룬다. 나중에 계정 연동으로 바꿀 수 있게 함수로만 접근한다.
+  - 화면은 `useProgress()`로 읽고 `progressStore.recordFirstAttempt / markComplete`로 쓴다. 저장 키는 `jungle-textbook:v1` (형식을 바꾸면 버전을 올린다).
+  - 퀴즈는 첫 시도만 저장하고 덮어쓰지 않는다. 저장에 실패해도 메모리로 계속 동작하고 `SaveNotice`가 알린다.
+  - 정적 HTML에는 진행도가 없다 (`ready: false`). 진행도에 따라 달라지는 글자는 `ready`일 때만 보인다.
+- 상태별 스타일은 한 속성에 클래스 하나만 준다 (예: 배경색을 기본값과 상태값에 같이 주면 CSS 순서에 따라 엉뚱한 색이 이긴다).
+- 화면이 바뀐 뒤의 초점 이동·스크롤은 `requestAnimationFrame` 대신 `useEffect`로 한다 (탭이 뒤에 있으면 rAF가 멈춘다). 애니메이션이 끝나야 내용이 바뀌는 구조(`AnimatePresence mode="wait"`)는 쓰지 않는다.
 - 색·글꼴·간격은 `src/app/globals.css`의 디자인 토큰만 쓴다. 화면마다 임의 값을 넣지 않는다.
 - 모바일 우선: 375px 폭에서 깨지지 않게, 터치 영역은 44px 이상. 애니메이션은 `prefers-reduced-motion`을 존중한다.
 - 디자인 콘셉트 "전장의 안개 속 교과서": 횃불색(`torch`)은 "지금 위치"와 "주요 버튼"에만 쓴다. 점선 테두리는 "패치로 바뀔 수 있음"(패치 블록) 전용이다. 다른 곳에 점선을 쓰지 않는다.

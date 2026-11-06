@@ -19,17 +19,17 @@ export function QuizStep({ quiz, controls }: { quiz: QuizQuestion[]; controls: Q
   const index = Math.min(controls.index, quiz.length - 1);
   const question = quiz[index];
 
+  // 문제가 바뀌면 key 로 새 카드를 바로 그리고, 들어오는 움직임만 준다.
+  // (나가는 애니메이션이 끝날 때까지 기다리면, 탭이 뒤에 있을 때 새 문제가 늦게 나타난다)
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <QuestionCard
-        key={question.id}
-        question={question}
-        chosen={controls.answers[question.id]}
-        isLast={index === quiz.length - 1}
-        onAnswer={(choice) => controls.onAnswer(question.id, choice)}
-        onNext={controls.onNext}
-      />
-    </AnimatePresence>
+    <QuestionCard
+      key={question.id}
+      question={question}
+      chosen={controls.answers[question.id]}
+      isLast={index === quiz.length - 1}
+      onAnswer={(choice) => controls.onAnswer(question.id, choice)}
+      onNext={controls.onNext}
+    />
   );
 }
 
@@ -51,21 +51,26 @@ function QuestionCard({ question, chosen, isLast, onAnswer, onNext }: {
     headingRef.current?.focus({ preventScroll: true });
   }, []);
 
+  // 고른 직후(해설이 화면에 그려진 다음) 해설로 스크롤하고 초점을 옮긴다.
+  // 이미 풀어 둔 문제로 돌아왔을 때는 움직이지 않는다
+  const justAnswered = useRef(false);
+  useEffect(() => {
+    if (!justAnswered.current || chosen === undefined) return;
+    justAnswered.current = false;
+    feedbackRef.current?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+    feedbackRef.current?.querySelector<HTMLElement>("[data-feedback-heading]")?.focus({ preventScroll: true });
+  }, [chosen, reduceMotion]);
+
   const choose = (i: number) => {
     if (grade) return; // 한 번 고르면 바꿀 수 없다 (첫 판단 연습)
+    justAnswered.current = true;
     onAnswer(i);
-    // 해설이 화면에 그려진 다음 해설로 스크롤하고 초점을 옮긴다
-    requestAnimationFrame(() => {
-      feedbackRef.current?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
-      feedbackRef.current?.querySelector<HTMLElement>("[data-feedback-heading]")?.focus({ preventScroll: true });
-    });
   };
 
   return (
     <motion.article
       initial={{ opacity: 0, x: 16 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -16 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
     >
       <Situation question={question} />

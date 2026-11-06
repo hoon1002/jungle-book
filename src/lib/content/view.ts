@@ -49,6 +49,29 @@ export function toLessonView(lesson: PublishedLesson, all: Lesson[]): LessonView
   };
 }
 
+/** 홈 강좌 지도에 넘기는 레슨 한 줄 */
+export type CourseLesson = {
+  slug: string;
+  order: number;
+  title: string;
+  goal: string | null;
+  available: boolean;
+  questionIds: string[];
+};
+
+export function toCourseLessons(all: Lesson[]): CourseLesson[] {
+  return [...all]
+    .sort((a, b) => a.order - b.order)
+    .map((l) => ({
+      slug: l.slug,
+      order: l.order,
+      title: l.title,
+      goal: l.status === "공개" ? l.meta.goal : (l.goal ?? null),
+      available: l.status === "공개",
+      questionIds: l.status === "공개" ? l.quiz.map((q) => q.id) : [],
+    }));
+}
+
 export function parseStep(value: string | null | undefined): LessonStep {
   return value === "quiz" || value === "summary" ? value : "read";
 }

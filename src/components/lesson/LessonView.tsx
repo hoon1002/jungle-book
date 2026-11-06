@@ -6,16 +6,18 @@ import { QuizStep, type QuizControls } from "@/components/quiz/QuizStep";
 import type { LessonStep, LessonViewData } from "@/lib/content/view";
 import { ReadStep } from "./ReadStep";
 import { RouteProgress } from "./RouteProgress";
-import { SummaryStep } from "./SummaryStep";
+import { SaveNotice } from "@/components/progress/SaveNotice";
+import { SummaryStep, type CompletionInfo } from "./SummaryStep";
 
 /**
  * 레슨 한 편의 화면. 단계(step)에 따라 읽기 / 퀴즈 / 정리 중 하나를 보여 준다.
  * quiz 가 없으면(처음 HTML을 만들 때) 읽기 화면만 그린다.
  */
-export function LessonView({ lesson, step, quiz, onRetry }: {
+export function LessonView({ lesson, step, quiz, completion, onRetry }: {
   lesson: LessonViewData;
   step: LessonStep;
   quiz?: QuizControls;
+  completion?: CompletionInfo;
   onRetry?: () => void;
 }) {
   const quizCount = lesson.quiz.length;
@@ -43,9 +45,10 @@ export function LessonView({ lesson, step, quiz, onRetry }: {
       </header>
 
       <main className="mx-auto max-w-column px-5 pb-20 pt-8 sm:pt-12">
+        <SaveNotice className="mb-8" />
         {step === "read" && <ReadStep lesson={lesson} />}
         {step === "quiz" && quiz && <QuizStep quiz={lesson.quiz} controls={quiz} />}
-        {step === "summary" && <SummaryStep lesson={lesson} onRetry={onRetry} />}
+        {step === "summary" && <SummaryStep lesson={lesson} completion={completion} onRetry={onRetry} />}
       </main>
     </MotionConfig>
   );

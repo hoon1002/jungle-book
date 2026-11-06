@@ -1,28 +1,26 @@
-import Link from "next/link";
+import { CourseMap } from "@/components/home/CourseMap";
+import { SaveNotice } from "@/components/progress/SaveNotice";
 import { getLessons } from "@/lib/content/load";
+import { toCourseLessons } from "@/lib/content/view";
 
-// 임시 홈: 4단계에서 강좌 지도로 바뀐다. 지금은 레슨으로 들어가는 길만 둔다.
 export default async function Home() {
-  const lessons = await getLessons();
+  const lessons = toCourseLessons(await getLessons());
+
   return (
-    <main className="mx-auto max-w-column px-5 py-16">
-      <h1 className="font-display text-title font-bold tracking-tight sm:text-title-lg">정글 교과서</h1>
-      <p className="mt-3 text-lichen">강좌 지도는 4단계에서 만들어요. 지금은 레슨 목록만 있어요.</p>
-      <ol className="mt-10 divide-y divide-moss border-y border-moss">
-        {lessons.map((l) => (
-          <li key={l.slug} className="py-4">
-            {l.status === "공개" ? (
-              <Link href={`/lessons/${l.slug}`} className="underline decoration-moss-bright underline-offset-4">
-                레슨 {l.order}. {l.title}
-              </Link>
-            ) : (
-              <span className="text-lichen">
-                레슨 {l.order}. {l.title} (준비 중)
-              </span>
-            )}
-          </li>
-        ))}
-      </ol>
+    <main className="mx-auto max-w-column px-5 pb-20 pt-14 sm:pt-20">
+      <SaveNotice className="mb-10" />
+
+      <h1 className="font-display text-title-lg font-bold tracking-tight">정글 교과서</h1>
+      <div className="mt-5 space-y-3 text-subheading">
+        <p>
+          정글을 처음 하면 세 가지가 막막해요. 어디서 시작할지, 지금 뭘 할지, 적 정글러가 어디 있는지.
+        </p>
+        <p className="text-lichen">레슨을 읽고, 상황 퀴즈에서 직접 골라 보면서 익혀요. 고르면 바로 이유를 알려 줘요.</p>
+      </div>
+
+      <div className="mt-14">
+        <CourseMap lessons={lessons} />
+      </div>
     </main>
   );
 }
