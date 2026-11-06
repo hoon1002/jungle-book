@@ -18,6 +18,14 @@ describe("renderLessonMarkdown", () => {
     expect(html).toContain('src="/lesson-assets/01-test/images/route.svg"');
   });
 
+  it("레슨 이미지에 크기와 늦게 받기(lazy)를 적는다", async () => {
+    const { html } = await renderLessonMarkdown("![도식](./images/route.svg)", {
+      slug: "01-test",
+      imageSize: async () => ({ width: 640, height: 360 }),
+    });
+    expect(html).toContain('width="640" height="360" loading="lazy" decoding="async"');
+  });
+
   it("직접 쓴 HTML과 javascript: 링크는 화면에 넣지 않는다", async () => {
     const { html } = await render('<script>alert(1)</script>\n\n[누르기](javascript:alert(1)) <img src=x onerror="alert(1)">');
     expect(html).not.toContain("<script");

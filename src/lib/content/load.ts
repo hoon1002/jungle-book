@@ -4,6 +4,7 @@
  */
 import fs from "node:fs/promises";
 import path from "node:path";
+import sharp from "sharp";
 import { parseDocument } from "yaml";
 import type { z } from "zod";
 import { renderLessonMarkdown } from "./markdown";
@@ -126,7 +127,11 @@ async function loadOne(
   const verifiedPatch = meta ? meta.verifiedPatch : typeof rawMeta.verifiedPatch === "string" ? rawMeta.verifiedPatch : undefined;
 
   // ── 본문 ──
-  const md = await renderLessonMarkdown(fm.body, { slug, verifiedPatch });
+  const md = await renderLessonMarkdown(fm.body, {
+    slug,
+    verifiedPatch,
+    imageSize: (file) => readImageSize(path.join(dir, slug, "images", file)),
+  });
   md.problems.forEach((m) => err(lessonFile, m));
   if (!md.headings.includes("원칙")) {
     err(lessonFile, "본문에 ## 원칙 제목이 있어야 합니다 (패치가 바뀌어도 유지되는 판단 기준)");
@@ -263,6 +268,16 @@ function reportZod(error: z.ZodError, file: string, problems: Problem[], emptyLa
 async function readText(p: string): Promise<string | null> {
   try {
     return await fs.readFile(p, "utf8");
+  } catch {
+    return null;
+  }
+}
+
+/** 이미지 가로·세로 (읽지 못하면 null: 파일이 없으면 위에서 따로 오류로 알린다) */
+async function readImageSize(file: string): Promise<{ width: number; height: number } | null> {
+  try {
+    const { width, height } = await sharp(file).metadata();
+    return width && height ? { width, height } : null;
   } catch {
     return null;
   }

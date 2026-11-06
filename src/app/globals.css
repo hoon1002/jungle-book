@@ -18,7 +18,7 @@
 
   /* 글꼴: 본문·화면 = Pretendard, 레슨 제목 = Hahmlet(세리프) */
   --font-sans:
-    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo",
+    Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo",
     "Noto Sans KR", sans-serif;
 
   /* 글자 크기 (한국어는 줄 간격을 넉넉하게) */
@@ -47,7 +47,12 @@
 }
 
 @theme inline {
-  --font-display: var(--font-hahmlet), "Pretendard Variable", serif;
+  --font-display: var(--font-hahmlet), Pretendard, serif;
+}
+
+/* 상단에 붙는 막대(sticky)는 top-0 대신 이걸 쓴다: 아이폰 상태 막대 바로 아래에 붙는다 */
+@utility top-safe {
+  top: env(safe-area-inset-top);
 }
 
 @layer base {
@@ -64,6 +69,19 @@
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+    /* 안전 영역: 홈 화면 앱(아이폰)에서 노치·상태 막대·홈 막대에 글자가 가리지 않게 띄운다. 일반 브라우저에서는 0 */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
+  }
+
+  /* 상태 막대 뒤로 스크롤된 글자가 비치지 않게 그 영역을 바탕색으로 가린다 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    height: env(safe-area-inset-top);
+    background-color: var(--color-night);
   }
 
   :focus-visible {

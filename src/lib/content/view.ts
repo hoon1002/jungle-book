@@ -80,3 +80,11 @@ export function parseStep(value: string | null | undefined): LessonStep {
 export function reviewLabel(review: string): string {
   return review.replace(/\s/g, "") === "검수전" ? "검수 전" : `검수: ${review}`;
 }
+
+/**
+ * 검색(구글·네이버)에 보여도 되는지. 공개 레슨이 모두 예시(isExample)면 숨긴다.
+ * 실제 레슨을 하나라도 공개하면 자동으로 검색에 나온다.
+ */
+export function hasRealLesson(all: Lesson[]): boolean {
+  return all.some((l) => l.status === "공개" && !l.meta.isExample);
+}

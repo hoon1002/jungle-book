@@ -28,7 +28,7 @@ export function LessonView({ lesson, step, quiz, completion, onRetry }: {
   return (
     // 기기에서 "동작 줄이기"를 켜 두면 움직임을 끈다
     <MotionConfig reducedMotion="user">
-      <header className="sticky top-0 z-10 border-b border-moss bg-night/95 backdrop-blur">
+      <header className="sticky top-safe z-10 border-b border-moss bg-night/95 backdrop-blur">
         <div className="mx-auto max-w-column space-y-3 px-5 pb-3 pt-2">
           <div className="flex items-center justify-between gap-4">
             <Link

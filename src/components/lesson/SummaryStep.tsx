@@ -51,14 +51,15 @@ export function SummaryStep({ lesson, completion, onRetry }: {
           이 레슨은 아래 자료를 바탕으로 썼어요. 믿어도 되는지 직접 확인해 보세요.
         </p>
 
-        <ul className="mt-6 space-y-4">
+        <ul className="mt-4 space-y-2">
           {lesson.sources.map((s) => (
             <li key={s.url}>
+              {/* 문장 속 링크가 아니라 따로 누르는 링크라서, 손가락 터치 영역(44px)을 확보한다 */}
               <a
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-moss-bright underline-offset-4 hover:decoration-bone"
+                className="inline-flex min-h-11 items-center underline decoration-moss-bright underline-offset-4 hover:decoration-bone"
               >
                 {s.title}
               </a>

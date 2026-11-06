@@ -41,6 +41,7 @@ const SANITIZE_SCHEMA: SanitizeSchema = {
     aside: [["className", "patch-block"], "dataVerifiedPatch"],
     p: [...(defaultSchema.attributes?.p ?? []), ["className", "patch-label"]],
     span: [["className", "patch-label__version", "patch-label__note"]],
+    img: [...(defaultSchema.attributes?.img ?? []), ["loading", "lazy"], ["decoding", "async"]],
   },
 };
 
@@ -50,7 +51,12 @@ function span(className: string, value: string): Element {
 
 export async function renderLessonMarkdown(
   markdown: string,
-  opts: { slug: string; verifiedPatch?: string },
+  opts: {
+    slug: string;
+    verifiedPatch?: string;
+    /** 레슨 폴더 images/ 안 파일의 가로·세로 크기 (모르면 null) */
+    imageSize?: (file: string) => Promise<{ width: number; height: number } | null>;
+  },
 ): Promise<MarkdownResult> {
   const result: Omit<MarkdownResult, "html"> = {
     headings: [],
@@ -60,7 +66,8 @@ export async function renderLessonMarkdown(
     problems: [],
   };
 
-  const lessonPlugin = () => (tree: MdRoot) => {
+  const lessonPlugin = () => async (tree: MdRoot) => {
+    const pending: Promise<void>[] = [];
     visit(tree, (node, index, parent) => {
       if (node.type === "heading") {
         result.headings.push(
@@ -117,8 +124,17 @@ export async function renderLessonMarkdown(
         const file = decodeURIComponent(match[1]);
         result.localImages.push(file);
         node.url = `${LESSON_ASSET_BASE}/${opts.slug}/images/${encodeURI(file)}`;
+        // 크기를 미리 적어 두면 그림이 늦게 떠도 아래 글이 밀리지 않는다. 화면 밖 그림은 가까워지면 받는다
+        const image = node;
+        pending.push(
+          (async () => {
+            const size = (await opts.imageSize?.(file)) ?? {};
+            image.data = { ...image.data, hProperties: { ...size, loading: "lazy", decoding: "async" } };
+          })(),
+        );
       }
     });
+    await Promise.all(pending);
   };
 
   // 마크다운 규칙상 주소에 띄어쓰기가 있으면 이미지로 인식되지 않고 글자로 보인다
