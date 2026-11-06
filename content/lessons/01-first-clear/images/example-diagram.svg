@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t">
   <title id="t">예시 도식 자리</title>
-  <rect x="1" y="1" width="638" height="358" rx="16" fill="#0f1a14" stroke="#3a5a48" stroke-width="2" stroke-dasharray="10 8"/>
+  <rect x="1" y="1" width="638" height="358" rx="16" fill="#0f1a14" stroke="#3a5a48" stroke-width="2"/>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="#8fd6a8"/>
