@@ -1,20 +1,31 @@
 "use client";
 
+import { MotionConfig } from "motion/react";
 import Link from "next/link";
+import { QuizStep, type QuizControls } from "@/components/quiz/QuizStep";
 import type { LessonStep, LessonViewData } from "@/lib/content/view";
 import { ReadStep } from "./ReadStep";
 import { RouteProgress } from "./RouteProgress";
 import { SummaryStep } from "./SummaryStep";
-import { QuizStepPlaceholder } from "./QuizStepPlaceholder";
 
-/** 레슨 한 편의 화면. 단계(step)에 따라 읽기 / 퀴즈 / 정리 중 하나를 보여 준다 */
-export function LessonView({ lesson, step }: { lesson: LessonViewData; step: LessonStep }) {
+/**
+ * 레슨 한 편의 화면. 단계(step)에 따라 읽기 / 퀴즈 / 정리 중 하나를 보여 준다.
+ * quiz 가 없으면(처음 HTML을 만들 때) 읽기 화면만 그린다.
+ */
+export function LessonView({ lesson, step, quiz, onRetry }: {
+  lesson: LessonViewData;
+  step: LessonStep;
+  quiz?: QuizControls;
+  onRetry?: () => void;
+}) {
   const quizCount = lesson.quiz.length;
-  const position = step === "read" ? 0 : step === "quiz" ? 1 : quizCount + 1;
-  const label = step === "read" ? "읽기" : step === "quiz" ? `퀴즈 1/${quizCount}` : "정리";
+  const quizIndex = Math.min(quiz?.index ?? 0, quizCount - 1);
+  const position = step === "read" ? 0 : step === "quiz" ? quizIndex + 1 : quizCount + 1;
+  const label = step === "read" ? "읽기" : step === "quiz" ? `퀴즈 ${quizIndex + 1}/${quizCount}` : "정리";
 
   return (
-    <>
+    // 기기에서 "동작 줄이기"를 켜 두면 움직임을 끈다
+    <MotionConfig reducedMotion="user">
       <header className="sticky top-0 z-10 border-b border-moss bg-night/95 backdrop-blur">
         <div className="mx-auto max-w-column space-y-3 px-5 pb-3 pt-2">
           <div className="flex items-center justify-between gap-4">
@@ -33,10 +44,10 @@ export function LessonView({ lesson, step }: { lesson: LessonViewData; step: Les
 
       <main className="mx-auto max-w-column px-5 pb-20 pt-8 sm:pt-12">
         {step === "read" && <ReadStep lesson={lesson} />}
-        {step === "quiz" && <QuizStepPlaceholder lesson={lesson} />}
-        {step === "summary" && <SummaryStep lesson={lesson} />}
+        {step === "quiz" && quiz && <QuizStep quiz={lesson.quiz} controls={quiz} />}
+        {step === "summary" && <SummaryStep lesson={lesson} onRetry={onRetry} />}
       </main>
-    </>
+    </MotionConfig>
   );
 }
 

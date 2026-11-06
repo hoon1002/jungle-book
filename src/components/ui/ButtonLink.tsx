@@ -7,13 +7,24 @@ const VARIANT = {
   secondary: "border border-moss-bright text-bone hover:bg-canopy",
 } as const;
 
-export const buttonClass = (variant: keyof typeof VARIANT = "primary") =>
+type Variant = keyof typeof VARIANT;
+
+export const buttonClass = (variant: Variant = "primary") =>
   `inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-5 py-2.5 text-center font-bold transition-colors motion-reduce:transition-none sm:w-auto ${VARIANT[variant]}`;
 
 export function ButtonLink({
   variant = "primary",
   className = "",
   ...props
-}: ComponentProps<typeof Link> & { variant?: keyof typeof VARIANT }) {
+}: ComponentProps<typeof Link> & { variant?: Variant }) {
   return <Link {...props} className={`${buttonClass(variant)} ${className}`} />;
+}
+
+export function Button({
+  variant = "primary",
+  className = "",
+  type = "button",
+  ...props
+}: ComponentProps<"button"> & { variant?: Variant }) {
+  return <button type={type} {...props} className={`${buttonClass(variant)} ${className}`} />;
 }

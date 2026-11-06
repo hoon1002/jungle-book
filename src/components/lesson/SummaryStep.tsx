@@ -1,9 +1,9 @@
 import type { LessonViewData } from "@/lib/content/view";
 import { reviewLabel } from "@/lib/content/view";
-import { ButtonLink } from "@/components/ui/ButtonLink";
+import { Button, ButtonLink } from "@/components/ui/ButtonLink";
 import { josa } from "@/lib/korean";
 
-export function SummaryStep({ lesson }: { lesson: LessonViewData }) {
+export function SummaryStep({ lesson, onRetry }: { lesson: LessonViewData; onRetry?: () => void }) {
   const { next } = lesson;
   const hasNext = next?.available === true;
 
@@ -60,6 +60,11 @@ export function SummaryStep({ lesson }: { lesson: LessonViewData }) {
           <ButtonLink variant={hasNext ? "secondary" : "primary"} href="/">
             강좌 지도로 돌아가기
           </ButtonLink>
+          {onRetry && (
+            <Button variant="secondary" onClick={onRetry}>
+              퀴즈 다시 풀기
+            </Button>
+          )}
         </div>
         {next && !next.available && (
           <p className="mt-4 text-small text-lichen">
